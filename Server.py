@@ -3,6 +3,7 @@ from json import dumps
 from tinydb import TinyDB, Query
 import os
 import subprocess
+from threading import Thread
 app = Flask(__name__)
 
 @app.route('/Shoes/<db>')
@@ -34,17 +35,26 @@ def DbOtherSearch(db, search):
 @app.route('/Start/Concept')
 def StartConcept():
     dir_path = os.path.dirname(os.path.realpath("./ConceptsSpider.py"))
-    subprocess.call(["python", str(dir_path)+"/ConceptsSpider.py"])
+    def MasterThreader():
+        subprocess.call(["python", str(dir_path)+"/ConceptsSpider.py"])
+    thread = Thread(target=MasterThreader)
+    thread.start()
     return dumps({'completed':True})
 @app.route('/Start/Kith')
 def StartKith():
     dir_path = os.path.dirname(os.path.realpath("./KithScraper.py"))
-    subprocess.call(["python", str(dir_path)+"/KithScraper.py"])
-    return dumps({'completed':True})
+    def MasterThreader():
+        subprocess.call(["python", str(dir_path)+"/KithScraper.py"])
+    thread = Thread(target=MasterThreader)
+    thread.start()
+    return dumps({'started':True})
 @app.route('/Start/Undefeated')
 def StartUndefeated():
     dir_path = os.path.dirname(os.path.realpath("./UndefeatedScraper.py"))
-    subprocess.call(["python", str(dir_path)+"/UndefeatedScraper.py"])
+    def MasterThreader():
+        subprocess.call(["python", str(dir_path)+"/UndefeatedScraper.py"])
+    thread = Thread(target=MasterThreader)
+    thread.start()
     return dumps({'completed':True})
 if __name__ == "__main__":
     app.run(port='1337')
