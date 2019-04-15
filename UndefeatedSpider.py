@@ -32,7 +32,7 @@ class Spider(scrapy.Spider):
     name = "Undefeated"
     x=1
     CurURL=0
-    urls=[['https://undefeated.com/collections/apparel/outerwear?page=','Outerwear'],['https://undefeated.com/collections/footwear?page=','Shoes']]
+    urls=[['https://undefeated.com/collections/apparel/tees?page=', 'Tees'],['https://undefeated.com/collections/apparel/tops?page=','Tops'],['https://undefeated.com/collections/apparel/outerwear?page=','Outerwear'],['https://undefeated.com/collections/footwear?page=','Shoes']]
     site=None
     catagory=None
     def start_requests(self):
