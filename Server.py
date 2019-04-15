@@ -8,12 +8,17 @@ import datetime
 import pytz
 app = Flask(__name__)
 
-LastCompletedConcept = "Never"
-LastCompletedKith = "Never"
-LastCompletedUndefeated = "Never"
+TZDB = TinyDB('TZDB.json')
+Q = Query()
+TZDB.upsert({'LastCompletedConcept':'Never','CONTENTID':'01'},Q.CONTENTID == '01')
+TZDB.upsert({'LastCompletedKith':'Never','CONTENTID':'02'},Q.CONTENTID == '02')
+TZDB.upsert({'LastCompletedUndefeated':'Never','CONTENTID':'03'},Q.CONTENTID == '03')
+
+
 @app.route('/GetTZ')
 def TZShow():
-    return dumps({"LastCompletedConcept":LastCompletedConcept,"LastCompletedKith":LastCompletedKith,"LastCompletedUndefeated":LastCompletedUndefeated})
+
+    return dumps(TZDB.all())
 @app.route('/Shoes/<db>')
 def DbShoesDefault(db):
     db = TinyDB('DBFiles/'+str(db)+'.json')
@@ -45,8 +50,8 @@ def StartConcept():
     dir_path = os.path.dirname(os.path.realpath("./ConceptsSpider.py"))
     def MasterThreader():
         subprocess.call(["python", str(dir_path)+"/ConceptsSpider.py"])
-        global LastCompletedConcept
         LastCompletedConcept = str(datetime.datetime.now(tz=pytz.timezone('US/Central')).strftime("%Y-%m-%d %H:%M")+" CST")
+        TZDB.upsert({'LastCompletedConcept':LastCompletedConcept,'CONTENTID':'01'},Q.CONTENTID == '01')
     thread = Thread(target=MasterThreader)
     thread.start()
     return dumps({'completed':True})
@@ -55,8 +60,8 @@ def StartKith():
     dir_path = os.path.dirname(os.path.realpath("./KithScraper.py"))
     def MasterThreader():
         subprocess.call(["python", str(dir_path)+"/KithScraper.py"])
-        global LastCompletedKith
         LastCompletedKith = str(datetime.datetime.now(tz=pytz.timezone('US/Central')).strftime("%Y-%m-%d %H:%M")+" CST")
+        TZDB.upsert({'LastCompletedKith':LastCompletedKith,'CONTENTID':'02'},Q.CONTENTID == '02')
     thread = Thread(target=MasterThreader)
     thread.start()
     return dumps({'started':True})
@@ -65,8 +70,8 @@ def StartUndefeated():
     dir_path = os.path.dirname(os.path.realpath("./UndefeatedSpider.py"))
     def MasterThreader():
         subprocess.call(["python", str(dir_path)+"/UndefeatedSpider.py"])
-        global LastCompletedUndefeated
         LastCompletedUndefeated = str(datetime.datetime.now(tz=pytz.timezone('US/Central')).strftime("%Y-%m-%d %H:%M")+" CST")
+        TZDB.upsert({'LastCompletedUndefeated':LastCompletedUndefeated,'CONTENTID':'03'},Q.CONTENTID == '03')
     thread = Thread(target=MasterThreader)
     thread.start()
     return dumps({'completed':True})
@@ -76,3 +81,4 @@ if __name__ == "__main__":
     except FileExistsError:
         pass
     app.run(port='1337')
+
