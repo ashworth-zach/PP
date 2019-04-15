@@ -57,4 +57,8 @@ def StartUndefeated():
     thread.start()
     return dumps({'completed':True})
 if __name__ == "__main__":
+    try:
+        os.makedirs("DBFiles")
+    except FileExistsError:
+        pass
     app.run(port='1337')
