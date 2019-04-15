@@ -50,9 +50,9 @@ def StartKith():
     return dumps({'started':True})
 @app.route('/Start/Undefeated')
 def StartUndefeated():
-    dir_path = os.path.dirname(os.path.realpath("./UndefeatedScraper.py"))
+    dir_path = os.path.dirname(os.path.realpath("./UndefeatedSpider.py"))
     def MasterThreader():
-        subprocess.call(["python", str(dir_path)+"/UndefeatedScraper.py"])
+        subprocess.call(["python", str(dir_path)+"/UndefeatedSpider.py"])
     thread = Thread(target=MasterThreader)
     thread.start()
     return dumps({'completed':True})
