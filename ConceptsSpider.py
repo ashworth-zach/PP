@@ -44,7 +44,7 @@ class Spider(scrapy.Spider):
                 price = item.css('span::text').extract()[0]
                 image = item.css('img::attr(src)').extract()[0]
                 if name != "Unknown":
-                    db.upsert({'Site':'Concepts','catagory':self.urls[0][1],'title':name,'price':price.strip(), 'colors':colors, 'image':image, 'href':'cncpts.com'+str(ahref)}, Q.href == 'cncpts.com'+str(ahref))
+                    db.upsert({'Site':'Concepts','catagory':self.urls[self.CurURL][1],'title':name,'price':price.strip(), 'colors':colors, 'image':image, 'href':'cncpts.com'+str(ahref)}, Q.href == 'cncpts.com'+str(ahref))
             self.x +=1
             yield scrapy.Request(url=self.urls[self.CurURL][0]+str(self.x), callback=self.parse)
         else:

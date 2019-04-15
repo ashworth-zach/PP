@@ -57,7 +57,7 @@ class Spider(scrapy.Spider):
                 image = cleanLink(dirtyimage[0])
                 ahref = item.css('a::attr(href)').extract()[0]
                 price = item.css('span.money::text').extract()[0]
-                db.upsert({"Site":"Undefeated","catagory":self.urls[0][1], 'title':name,'price':price, 'colors':colors, 'image':image, 'href':'undefeated.com'+str(ahref)}, Q.href == 'undefeated.com'+str(ahref))
+                db.upsert({"Site":"Undefeated","catagory":self.urls[self.CurURL][1], 'title':name,'price':price, 'colors':colors, 'image':image, 'href':'undefeated.com'+str(ahref)}, Q.href == 'undefeated.com'+str(ahref))
             self.x += 1
             yield scrapy.Request(url=self.urls[self.CurURL][0]+str(self.x), callback=self.parse)
         else:

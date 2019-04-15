@@ -7,17 +7,13 @@ from threading import Thread
 import datetime
 import pytz
 app = Flask(__name__)
-
 TZDB = TinyDB('TZDB.json')
 Q = Query()
 TZDB.upsert({'LastCompletedConcept':'Never','CONTENTID':'01'},Q.CONTENTID == '01')
 TZDB.upsert({'LastCompletedKith':'Never','CONTENTID':'02'},Q.CONTENTID == '02')
 TZDB.upsert({'LastCompletedUndefeated':'Never','CONTENTID':'03'},Q.CONTENTID == '03')
-
-
 @app.route('/GetTZ')
 def TZShow():
-
     return dumps(TZDB.all())
 @app.route('/Shoes/<db>')
 def DbShoesDefault(db):
@@ -81,4 +77,3 @@ if __name__ == "__main__":
     except FileExistsError:
         pass
     app.run(port='1337')
-
